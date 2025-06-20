@@ -25,7 +25,7 @@ jobs:
           npm install
       - name: run build
         run: |
-          npm run build
           cp src/config.ts.example src/config.ts
+          npm run build
       - name: run tests integration
         run: npm run test:integration
