@@ -24,6 +24,8 @@ jobs:
           rm -f package-lock.json
           npm install
       - name: run build
-        run: npm run build
+        run: |
+          npm run build
+          cp src/config.ts.example src/config.ts
       - name: run tests integration
         run: npm run test:integration
