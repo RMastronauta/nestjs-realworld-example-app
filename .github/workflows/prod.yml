@@ -10,22 +10,43 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: nestjsrealworld
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
+
       - name: using node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
+
       - name: Ignore SSL errors (insecure)
         run: npm config set registry https://registry.npmjs.org/
+
       - name: install dependencies
         run: |
           rm -rf node_modules
           rm -f package-lock.json
           npm install
-      - name: run build
+
+      - name: Copy config and build
         run: |
           cp src/config.ts.example src/config.ts
+          cp ormconfig.ci.json ormconfig.json
           npm run build
-      - name: run tests integration
+
+      - name: Run integration tests
         run: npm run test:integration
