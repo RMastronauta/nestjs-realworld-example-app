@@ -4,15 +4,15 @@
   "description": "[![Build Status](https://travis-ci.org/anishkny/node-express-realworld-example-app.svg?branch=master)](https://travis-ci.org/anishkny/node-express-realworld-example-app)",
   "main": "index.js",
   "scripts": {
-  "start": "node index.js",
-  "start:watch": "nodemon",
-  "prestart:prod": "tsc",
-  "start:prod": "node dist/main.js",
-  "build": "tsc",
-  "test": "jest --config=jest.json",
-  "test:watch": "jest --watch --config=jest.json",
-  "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
-  "test:integration": "jest --config=./test/jest-test.json"
+    "start": "node index.js",
+    "start:watch": "nodemon",
+    "prestart:prod": "tsc",
+    "start:prod": "node dist/main.js",
+    "build": "tsc",
+    "test": "jest --config=jest.json",
+    "test:watch": "jest --watch --config=jest.json",
+    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
+    "test:integration": "jest --config=./test/jest-test.json"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "crypto-js": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.5",
