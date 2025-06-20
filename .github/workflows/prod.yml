@@ -17,7 +17,12 @@ jobs:
         with:
           node-version: 16.x
       - name: Ignore SSL errors (insecure)
-        run: npm config set registry https://registry.npmjs.org/
+        run: |
+          npm config delete registry || true
+          npm config set registry https://registry.npmjs.org/
+          npm config delete cafile || true
+          npm config delete strict-ssl || true
+          npm cache clean --force
       - name: install dependencies
         run: npm install
       - name: run build
