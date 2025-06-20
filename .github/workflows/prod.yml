@@ -28,28 +28,35 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: using node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          
-      - name: Ignore SSL errors (insecure)
+
+      - name: Set npm registry to official
         run: npm config set registry https://registry.npmjs.org/
+
       - name: Install dependencies
         run: |
-          rm -rf node_modules
-          rm -f package-lock.json
+          rm -rf node_modules package-lock.json
           npm install
 
       - name: Copy Prisma env file
         run: cp prisma/.env.example prisma/.env
 
-      - name: Run Prisma migrate and generate
+      - name: Wait for MySQL to be ready
         run: |
-          npx prisma migrate deploy
-          npx prisma generate
+          until mysqladmin ping -h mysql --silent; do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
 
-      - name: Copy config and build
+      - name: Run Prisma migrations and generate client
+        run: |
+          npx prisma migrate deploy --schema=prisma/schema.prisma
+          npx prisma generate --schema=prisma/schema.prisma
+
+      - name: Copy config and build project
         run: |
           cp src/config.ts.example src/config.ts
           npm run build
