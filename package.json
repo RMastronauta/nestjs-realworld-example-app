@@ -8,10 +8,11 @@
   "start:watch": "nodemon",
   "prestart:prod": "tsc",
   "start:prod": "node dist/main.js",
+  "build": "tsc",
   "test": "jest --config=jest.json",
   "test:watch": "jest --watch --config=jest.json",
   "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
-  "test:integrado": "jest --config=./test/jest-test.json"
+  "test:integration": "jest --config=./test/jest-test.json"
   },
   "repository": {
     "type": "git",
