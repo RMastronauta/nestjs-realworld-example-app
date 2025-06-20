@@ -1,4 +1,5 @@
 name: continuous-integration
+
 on:
   push:
     branches:
@@ -10,34 +11,58 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: nestjsrealworld
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: using node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
 
-      - name: Set npm registry to official
+      - name: Ignore SSL errors (insecure)
         run: npm config set registry https://registry.npmjs.org/
 
       - name: Install dependencies
         run: |
-          rm -rf node_modules package-lock.json
+          rm -rf node_modules
+          rm -f package-lock.json
           npm install
-            
-      - name: Set custom DATABASE_URL
-        run: echo 'DATABASE_URL="mysql://mysql:f9f6cff4c6c4071a9b5c@painel.eduardoabrito.com.br:3031/nestjsrealworld"' > prisma/.env
 
-      - name: Run Prisma migrations and generate client
+      - name: Criar ormconfig.json
         run: |
-          npx prisma migrate deploy --schema=prisma/schema.prisma
-          npx prisma generate --schema=prisma/schema.prisma
+          cat <<EOF > ormconfig.json
+          {
+            "type": "mysql",
+            "host": "painel.eduardoabrito.com.br",
+            "port": 3031,
+            "username": "mysql",
+            "password": "f9f6cff4c6c4071a9b5c",
+            "database": "nestjsrealworld",
+            "entities": ["src/*/*.entity{.ts,.js}"],
+            "synchronize": true
+          }
+          EOF
 
-      - name: Copy config and build project
-        run: |
-          cp src/config.ts.example src/config.ts
-          npm run build
+      - name: Copiar config.ts
+        run: cp src/config.ts.example src/config.ts
+
+      - name: Build
+        run: npm run build
 
       - name: Run integration tests
         run: npm run test:integration
