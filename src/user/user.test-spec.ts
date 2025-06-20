@@ -102,7 +102,6 @@ describe('User', () => {
         .expect(200)
         .expect((res) => {
             expect(res.body).toHaveProperty('affected', 1);
-            
         });
     });
 });
