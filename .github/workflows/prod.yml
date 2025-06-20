@@ -10,21 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: nestjsrealworld-prisma
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
     steps:
       - uses: actions/checkout@v3
 
@@ -40,16 +25,9 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
           npm install
-
-      - name: Copy Prisma env file
-        run: cp prisma/.env.example prisma/.env
-
-      - name: Wait for MySQL to be ready
-        run: |
-          until mysqladmin ping -h mysql --silent; do
-            echo "Waiting for MySQL..."
-            sleep 5
-          done
+            
+      - name: Set custom DATABASE_URL
+        run: echo 'DATABASE_URL="mysql://mysql:f9f6cff4c6c4071a9b5c@painel.eduardoabrito.com.br:3031/nestjsrealworld"' > prisma/.env
 
       - name: Run Prisma migrations and generate client
         run: |
