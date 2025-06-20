@@ -16,7 +16,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: nestjsrealworld
+          MYSQL_DATABASE: nestjsrealworld-prisma
         ports:
           - 3306:3306
         options: >-
@@ -32,20 +32,26 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-
+          
       - name: Ignore SSL errors (insecure)
         run: npm config set registry https://registry.npmjs.org/
-
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           rm -rf node_modules
           rm -f package-lock.json
           npm install
 
+      - name: Copy Prisma env file
+        run: cp prisma/.env.example prisma/.env
+
+      - name: Run Prisma migrate and generate
+        run: |
+          npx prisma migrate deploy
+          npx prisma generate
+
       - name: Copy config and build
         run: |
           cp src/config.ts.example src/config.ts
-          cp ormconfig.ci.json ormconfig.json
           npm run build
 
       - name: Run integration tests
