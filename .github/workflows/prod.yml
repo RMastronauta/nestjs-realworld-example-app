@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - name: Set NPM registry to default
+      - name: Ignore SSL errors (insecure)
         run: npm config set registry https://registry.npmjs.org/
       - name: install dependencies
         run: npm install
