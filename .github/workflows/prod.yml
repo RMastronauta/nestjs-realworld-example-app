@@ -64,5 +64,5 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Run integration tests
-        run: npm run test:integration
+      - name: Run acceptance tests
+        run: npm run test:acceptance
