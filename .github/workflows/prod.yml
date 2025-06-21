@@ -61,8 +61,38 @@ jobs:
       - name: Build
         run: npm run build
 
+  integration-test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: using node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Run integration tests
         run: npm run test:integration
+
+  acceptance-test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: using node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run acceptance tests
         run: npm run test:acceptance
