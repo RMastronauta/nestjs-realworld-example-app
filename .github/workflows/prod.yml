@@ -97,7 +97,9 @@ jobs:
       - name: Run acceptance tests
         run: npm run test:acceptance
   deploy:
-    needs: build
+    needs: 
+      - integration-test
+      - acceptance-test
     runs-on: ubuntu-latest
 
     steps:
