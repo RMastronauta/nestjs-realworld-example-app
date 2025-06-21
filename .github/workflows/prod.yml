@@ -58,11 +58,11 @@ jobs:
           }
           EOF
 
-      - name: Copiar config.ts
-        run: cp src/config.ts.example src/config.ts
-
       - name: Build
         run: npm run build
+
+      - name: Run integration tests
+        run: npm run test:integration
 
       - name: Run acceptance tests
         run: npm run test:acceptance
