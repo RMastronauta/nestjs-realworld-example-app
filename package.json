@@ -11,7 +11,7 @@
     "build": "tsc",
     "test": "jest --config=jest.json",
     "test:watch": "jest --watch --config=jest.json",
-    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
+    "test:coverage": "jest --config=jest.json --coverage",
     "test:integration": "jest --config=./test/jest-test.json",
     "test:acceptance": "jest --config=./test/jest-acceptance.json --runInBand",
     "test:acceptance:report": "npm run test:acceptance && node scripts/generate-acceptance-report.js"

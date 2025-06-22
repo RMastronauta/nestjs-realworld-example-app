@@ -12,9 +12,15 @@
   "collectCoverageFrom": [
     "src/**/*.{js,jsx,tsx,ts}",
     "!**/node_modules/**",
-    "!**/vendor/**",
+    "!src/app.controller.ts",
+    "!src/app.module.ts",
+    "!src/main.ts",
+    "!src/config.ts",
+    "!src/user/**",
     "!src/user/**",
     "!src/**/*.module.{js,jsx,tsx,ts}"
   ],
-  "coverageReporters": ["json", "lcov"]
+  "collectCoverage": true,
+  "coverageReporters": ["text", "lcov"],
+  "coverageDirectory": "coverage"
 }
