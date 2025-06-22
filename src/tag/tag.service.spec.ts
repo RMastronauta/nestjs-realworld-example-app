@@ -1,26 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TagController } from './tag.controller';
 import { TagService } from './tag.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { TagEntity } from './tag.entity';
+import { Repository } from 'typeorm';
 
-describe('TagController', () => {
-  let controller: TagController;
+describe('TagService', () => {
   let service: TagService;
+  let repository: Repository<TagEntity>;
 
-  const mockTagService = {
-    findAll: jest.fn(),
+  const mockTagRepository = {
+    find: jest.fn(),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TagController],
       providers: [
-        { provide: TagService, useValue: mockTagService },
+        TagService,
+        { provide: getRepositoryToken(TagEntity), useValue: mockTagRepository },
       ],
     }).compile();
 
-    controller = module.get<TagController>(TagController);
     service = module.get<TagService>(TagService);
+    repository = module.get<Repository<TagEntity>>(getRepositoryToken(TagEntity));
   });
 
   afterEach(() => {
@@ -28,7 +29,7 @@ describe('TagController', () => {
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(service).toBeDefined();
   });
 
   it('should return all tags', async () => {
@@ -36,9 +37,9 @@ describe('TagController', () => {
       { id: 1, tag: 'nestjs' },
       { id: 2, tag: 'testing' },
     ];
-    mockTagService.findAll.mockResolvedValue(tags);
-    const result = await controller.findAll();
+    mockTagRepository.find.mockResolvedValue(tags);
+    const result = await service.findAll();
     expect(result).toBe(tags);
-    expect(service.findAll).toHaveBeenCalled();
+    expect(mockTagRepository.find).toHaveBeenCalled();
   });
 });
